@@ -77,9 +77,9 @@ namespace CustomersREST.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,6)");
 
-                    b.Property<Guid>("VehicleId")
+                    b.Property<Guid?>("VehicleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -166,9 +166,7 @@ namespace CustomersREST.Migrations
 
                     b.HasOne("CustomersREST.Database.Entities.Vehicle", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VehicleId");
 
                     b.Navigation("Customer");
 

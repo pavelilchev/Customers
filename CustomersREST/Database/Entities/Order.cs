@@ -23,7 +23,6 @@
         [ForeignKey("VehicleId")]
         public Vehicle Vehicle { get; set; }
 
-        [Required]
-        public Guid VehicleId { get; set; }
+        public Guid? VehicleId { get; set; }
     }
 }

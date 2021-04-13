@@ -116,6 +116,19 @@
                         .ToList();
         }
 
+        public IEnumerable<Order> GetOrders(Guid customerId)
+        {
+            if (customerId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(customerId));
+            }
+
+            return this.context.Orders
+                        .Where(c => c.CustomerId == customerId)
+                        .OrderBy(c => c.CloseDate)
+                        .ToList();
+        }
+
         public bool Save()
         {
             return this.context.SaveChanges() >= 0;

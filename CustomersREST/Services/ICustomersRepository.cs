@@ -26,6 +26,8 @@
 
         IEnumerable<Vehicle> GetVehicles(Guid CustomerId);
 
+        IEnumerable<Order> GetOrders(Guid customerId);
+
         bool Save();
     }
 }

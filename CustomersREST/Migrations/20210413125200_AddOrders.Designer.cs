@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomersREST.Migrations
 {
     [DbContext(typeof(CustomersContext))]
-    [Migration("20210413114915_AddOrders")]
+    [Migration("20210413125200_AddOrders")]
     partial class AddOrders
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,9 +79,9 @@ namespace CustomersREST.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,6)");
 
-                    b.Property<Guid>("VehicleId")
+                    b.Property<Guid?>("VehicleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -168,9 +168,7 @@ namespace CustomersREST.Migrations
 
                     b.HasOne("CustomersREST.Database.Entities.Vehicle", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VehicleId");
 
                     b.Navigation("Customer");
 

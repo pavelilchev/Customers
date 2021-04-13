@@ -3,6 +3,7 @@
     using CustomersREST.Database.Entities;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Linq;
 
     public class CustomersContext : DbContext
     {
@@ -16,9 +17,18 @@
         public DbSet<Vehicle> Vehicles { get; set; }
 
         public DbSet<Order> Orders { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var decimalProperties = modelBuilder
+                .Model
+                .GetEntityTypes()
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?));
+            foreach (var property in decimalProperties)
+            {
+                property.SetColumnType("decimal(18, 6)");
+            }
+
             // seed the database with dummy data
             modelBuilder.Entity<Customer>().HasData(
                 new Customer()
