@@ -20,5 +20,7 @@
         public string Email { get; set; }
 
         public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }
