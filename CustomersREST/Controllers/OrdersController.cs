@@ -23,6 +23,8 @@
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [HttpGet]
+        [HttpHead]
         public ActionResult<IEnumerable<OrderDto>> GetOrdersForCustomer(Guid customerId)
         {
             if (!this.customersRepository.CustomerExists(customerId))
@@ -33,6 +35,24 @@
             IEnumerable<Order> orders = this.customersRepository.GetOrders(customerId);
 
             return Ok(this.mapper.Map<IEnumerable<OrderDto>>(orders));
+        }
+
+        [HttpGet("{orderId}")]
+        [HttpHead]
+        public ActionResult<IEnumerable<OrderDto>> GetOrderForCustomer(Guid customerId, Guid orderId)
+        {
+            if (!this.customersRepository.CustomerExists(customerId))
+            {
+                return NotFound();
+            }
+
+            var order = this.customersRepository.GetOrder(customerId, orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(this.mapper.Map<OrderDto>(order));
         }
     }
 }

@@ -22,6 +22,7 @@
         }
 
         [HttpGet()]
+        [HttpHead]
         public ActionResult<IEnumerable<CustomerDto>> GetCustomers()
         {
             var customers = this.customersRepository.GetCustomers();
@@ -30,6 +31,7 @@
         }
 
         [HttpGet("{customerId}", Name = "GetCustomer")]
+        [HttpHead]
         public ActionResult<CustomerDto> GetCustomer(Guid customerId)
         {
             var customer = this.customersRepository.GetCustomer(customerId);

@@ -100,7 +100,8 @@
                 throw new ArgumentNullException(nameof(vehicleId));
             }
 
-            return this.context.Vehicles
+            return this.context
+                .Vehicles
                 .Where(c => c.CustomerId == CustomerId && c.Id == vehicleId).FirstOrDefault();
         }
 
@@ -111,9 +112,10 @@
                 throw new ArgumentNullException(nameof(CustomerId));
             }
 
-            return this.context.Vehicles
-                        .Where(c => c.CustomerId == CustomerId)
-                        .ToList();
+            return this.context
+                .Vehicles
+                .Where(c => c.CustomerId == CustomerId)
+                .ToList();
         }
 
         public IEnumerable<Order> GetOrders(Guid customerId)
@@ -123,10 +125,28 @@
                 throw new ArgumentNullException(nameof(customerId));
             }
 
-            return this.context.Orders
-                        .Where(c => c.CustomerId == customerId)
-                        .OrderBy(c => c.CloseDate)
-                        .ToList();
+            return this.context
+                .Orders
+                .Where(c => c.CustomerId == customerId)
+                .OrderBy(c => c.CloseDate)
+                .ToList();
+        }
+
+        public Order GetOrder(Guid customerId, Guid orderId)
+        {
+            if (customerId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(customerId));
+            }
+
+            if (orderId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(orderId));
+            }
+
+            return this.context
+                .Orders
+                .FirstOrDefault(o => o.CustomerId == customerId && o.Id == orderId);
         }
 
         public bool Save()

@@ -28,6 +28,8 @@
 
         IEnumerable<Order> GetOrders(Guid customerId);
 
+        Order GetOrder(Guid customerId, Guid orderId);
+
         bool Save();
     }
 }
