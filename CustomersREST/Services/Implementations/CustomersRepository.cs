@@ -67,6 +67,18 @@
             return this.context.Customers.ToList();
         }
 
+        public IEnumerable<Customer> GetCustomers(int? locationId)
+        {
+            if (!locationId.HasValue)
+            {
+                return this.GetCustomers();
+            }
+
+            return this.context.Customers
+                .Where(c => c.LocationId == locationId)
+                .ToList();
+        }
+
         public void AddVehicle(Guid customerId, Vehicle vehicle)
         {
             if (customerId == Guid.Empty)

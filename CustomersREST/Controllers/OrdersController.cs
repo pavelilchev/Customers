@@ -38,7 +38,6 @@
         }
 
         [HttpGet("{orderId}")]
-        [HttpHead]
         public ActionResult<IEnumerable<OrderDto>> GetOrderForCustomer(Guid customerId, Guid orderId)
         {
             if (!this.customersRepository.CustomerExists(customerId))

@@ -23,15 +23,14 @@
 
         [HttpGet()]
         [HttpHead]
-        public ActionResult<IEnumerable<CustomerDto>> GetCustomers()
+        public ActionResult<IEnumerable<CustomerDto>> GetCustomers(int? locationId)
         {
-            var customers = this.customersRepository.GetCustomers();
+            var customers = this.customersRepository.GetCustomers(locationId);
 
             return Ok(this.mapper.Map<IEnumerable<CustomerDto>>(customers));
         }
 
-        [HttpGet("{customerId}", Name = "GetCustomer")]
-        [HttpHead]
+        [HttpGet("{customerId}")]
         public ActionResult<CustomerDto> GetCustomer(Guid customerId)
         {
             var customer = this.customersRepository.GetCustomer(customerId);

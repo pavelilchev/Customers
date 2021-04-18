@@ -22,6 +22,8 @@
 
         IEnumerable<Customer> GetCustomers();
 
+        IEnumerable<Customer> GetCustomers(int? locationId);
+
         Vehicle GetVehicle(Guid CustomerId, Guid vehicleId);
 
         IEnumerable<Vehicle> GetVehicles(Guid CustomerId);

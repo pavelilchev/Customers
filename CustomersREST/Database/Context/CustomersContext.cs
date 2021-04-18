@@ -37,12 +37,14 @@
                     FirstName = "John",
                     LastName = "Doe",
                     Email = "john.doe@gmail.com",
+                    LocationId = 1,
                 },
                 new Customer()
                 {
                     Id = Guid.Parse("160a78a4-7076-4deb-a369-8a02c25abd23"),
                     FirstName = "Paul",
                     LastName = "Curtny",
+                    LocationId = 1,
                 },
                 new Customer()
                 {
@@ -50,6 +52,7 @@
                     FirstName = "Suji",
                     LastName = "Paji",
                     Email = "sp@taipan.ch",
+                    LocationId = 2,
                 }
                 );
 
