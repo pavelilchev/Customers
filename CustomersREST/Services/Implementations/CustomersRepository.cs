@@ -25,9 +25,9 @@
 
             customer.Id = Guid.NewGuid();
 
-            foreach (var vehicle in customer.Vehicles)
+            foreach (var order in customer.Orders)
             {
-                vehicle.Id = Guid.NewGuid();
+                order.Id = Guid.NewGuid();
             }
 
             this.context.Customers.Add(customer);
@@ -66,6 +66,16 @@
         public IEnumerable<Customer> GetCustomers()
         {
             return this.context.Customers.ToList();
+        }
+
+        public IEnumerable<Customer> GetCustomers(IEnumerable<Guid> ids)
+        {
+            if (ids == null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            return this.context.Customers.Where(c => ids.Contains(c.Id)).ToList();
         }
 
         public IEnumerable<Customer> GetCustomers(CustomersResourcesParameters customersResourcesParameters)
@@ -173,6 +183,22 @@
             return this.context
                 .Orders
                 .FirstOrDefault(o => o.CustomerId == customerId && o.Id == orderId);
+        }
+
+        public void AddOrder(Guid customerId, Order order)
+        {
+            if (customerId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(customerId));
+            }
+
+            if (order == null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+
+            order.CustomerId = customerId;
+            this.context.Orders.Add(order);
         }
 
         public bool Save()

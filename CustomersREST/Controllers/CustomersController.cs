@@ -1,6 +1,7 @@
 ﻿namespace CustomersREST.Controllers
 {
     using AutoMapper;
+    using CustomersREST.Database.Entities;
     using CustomersREST.Models;
     using CustomersREST.ResourseParameters;
     using CustomersREST.Services;
@@ -30,7 +31,7 @@
             return Ok(this.mapper.Map<IEnumerable<CustomerDto>>(customers));
         }
 
-        [HttpGet("{customerId}")]
+        [HttpGet("{customerId}", Name = "GetCustomer")]
         public ActionResult<CustomerDto> GetCustomer(Guid customerId)
         {
             var customer = this.customersRepository.GetCustomer(customerId);
@@ -41,6 +42,23 @@
             }
 
             return Ok(this.mapper.Map<CustomerDto>(customer));
+        }
+
+        [HttpPost]
+        public ActionResult<CustomerDto> CreateCustomer(CustomerForCreationDto customer)
+        {
+            var customerEntities = this.mapper.Map<Customer>(customer);
+            this.customersRepository.AddCustomer(customerEntities);
+            this.customersRepository.Save();
+
+            var customerToReturn = this.mapper.Map<CustomerDto>(customerEntities);
+
+            return CreatedAtRoute("GetCustomer",
+                new
+                {
+                    customerId = customerToReturn.Id
+                },
+                customerToReturn);
         }
     }
 }

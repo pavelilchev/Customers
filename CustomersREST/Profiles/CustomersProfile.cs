@@ -14,6 +14,8 @@
                       opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
             CreateMap<CustomerDto, Customer>();
+
+            CreateMap<CustomerForCreationDto, Customer>();
         }
     }
 }

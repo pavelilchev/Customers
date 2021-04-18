@@ -23,6 +23,8 @@
 
         IEnumerable<Customer> GetCustomers();
 
+        IEnumerable<Customer> GetCustomers(IEnumerable<Guid> ids);
+
         IEnumerable<Customer> GetCustomers(CustomersResourcesParameters customersResourcesParameters);
 
         Vehicle GetVehicle(Guid CustomerId, Guid vehicleId);
@@ -32,6 +34,8 @@
         IEnumerable<Order> GetOrders(Guid customerId);
 
         Order GetOrder(Guid customerId, Guid orderId);
+
+        void AddOrder(Guid customerId, Order order);
 
         bool Save();
     }

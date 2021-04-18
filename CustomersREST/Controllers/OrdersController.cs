@@ -37,7 +37,7 @@
             return Ok(this.mapper.Map<IEnumerable<OrderDto>>(orders));
         }
 
-        [HttpGet("{orderId}")]
+        [HttpGet("{orderId}", Name = "GetOrderForCustomer")]
         public ActionResult<IEnumerable<OrderDto>> GetOrderForCustomer(Guid customerId, Guid orderId)
         {
             if (!this.customersRepository.CustomerExists(customerId))
@@ -52,6 +52,28 @@
             }
 
             return Ok(this.mapper.Map<OrderDto>(order));
+        }
+
+
+        [HttpPost]
+        public ActionResult<OrderDto> CreateOrderForCustomer(Guid customerId, OrderForCreationDto order)
+        {
+            if (!this.customersRepository.CustomerExists(customerId))
+            {
+                return NotFound();
+            }
+
+            var orderEntiti = this.mapper.Map<Order>(order);
+            this.customersRepository.AddOrder(customerId, orderEntiti);
+
+            var orderToReturn = this.mapper.Map<OrderDto>(orderEntiti);
+            return CreatedAtRoute("GetOrderForCustomer",
+                new
+                {
+                    customerId = customerId,
+                    orderId = orderEntiti.Id,
+                },
+                orderToReturn);
         }
     }
 }
