@@ -60,5 +60,13 @@
                 },
                 customerToReturn);
         }
+
+        [HttpOptions]
+        public ActionResult<IEnumerable<CustomerDto>> GetCustomersOptions()
+        {
+            Response.Headers.Add("Allow", "GET,OPTIONS,POST");
+
+            return Ok();
+        }
     }
 }
