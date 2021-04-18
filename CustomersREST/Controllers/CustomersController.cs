@@ -1,8 +1,8 @@
 ﻿namespace CustomersREST.Controllers
 {
     using AutoMapper;
-    using CustomersREST.Database.Entities;
     using CustomersREST.Models;
+    using CustomersREST.ResourseParameters;
     using CustomersREST.Services;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -23,9 +23,9 @@
 
         [HttpGet()]
         [HttpHead]
-        public ActionResult<IEnumerable<CustomerDto>> GetCustomers(int? locationId, string search)
+        public ActionResult<IEnumerable<CustomerDto>> GetCustomers([FromQuery]CustomersResourcesParameters customersResourcesParameters)
         {
-            var customers = this.customersRepository.GetCustomers(locationId, search);
+            var customers = this.customersRepository.GetCustomers(customersResourcesParameters);
 
             return Ok(this.mapper.Map<IEnumerable<CustomerDto>>(customers));
         }

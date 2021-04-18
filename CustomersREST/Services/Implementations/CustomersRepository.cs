@@ -2,6 +2,7 @@
 {
     using CustomersREST.Database.Context;
     using CustomersREST.Database.Entities;
+    using CustomersREST.ResourseParameters;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -67,23 +68,26 @@
             return this.context.Customers.ToList();
         }
 
-        public IEnumerable<Customer> GetCustomers(int? locationId, string search)
+        public IEnumerable<Customer> GetCustomers(CustomersResourcesParameters customersResourcesParameters)
         {
-            if (!locationId.HasValue && string.IsNullOrWhiteSpace(search))
+            if (!customersResourcesParameters.Locationid.HasValue && 
+                string.IsNullOrWhiteSpace(customersResourcesParameters.Search))
             {
                 return this.GetCustomers();
             }
 
             var customers = this.context.Customers as IQueryable<Customer>;
-            if (locationId.HasValue)
+            if (customersResourcesParameters.Locationid.HasValue)
             {
-                customers = customers.Where(c => c.LocationId == locationId);
+                customers = customers.Where(c => c.LocationId == customersResourcesParameters.Locationid);
             }
 
-            if (!string.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrWhiteSpace(customersResourcesParameters.Search))
             {
-                search = search.Trim();
-                customers = customers.Where(c => c.FirstName.Contains(search) || c.LastName.Contains(search) || c.Email.Contains(search));
+                var search = customersResourcesParameters.Search.Trim();
+                customers = customers.Where(c => c.FirstName.Contains(search) || 
+                c.LastName.Contains(search) || 
+                c.Email.Contains(search));
             }
 
             return customers.ToList();

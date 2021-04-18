@@ -1,6 +1,7 @@
 ﻿namespace CustomersREST.Services
 {
     using CustomersREST.Database.Entities;
+    using CustomersREST.ResourseParameters;
     using System;
     using System.Collections.Generic;
 
@@ -22,7 +23,7 @@
 
         IEnumerable<Customer> GetCustomers();
 
-        IEnumerable<Customer> GetCustomers(int? locationId, string search);
+        IEnumerable<Customer> GetCustomers(CustomersResourcesParameters customersResourcesParameters);
 
         Vehicle GetVehicle(Guid CustomerId, Guid vehicleId);
 
