@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <StartupObject>CustomersREST.Program</StartupObject>
+    <UserSecretsId>31aa5a0c-175a-4fce-9b8e-39f98c4f4d7e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

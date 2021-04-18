@@ -67,16 +67,26 @@
             return this.context.Customers.ToList();
         }
 
-        public IEnumerable<Customer> GetCustomers(int? locationId)
+        public IEnumerable<Customer> GetCustomers(int? locationId, string search)
         {
-            if (!locationId.HasValue)
+            if (!locationId.HasValue && string.IsNullOrWhiteSpace(search))
             {
                 return this.GetCustomers();
             }
 
-            return this.context.Customers
-                .Where(c => c.LocationId == locationId)
-                .ToList();
+            var customers = this.context.Customers as IQueryable<Customer>;
+            if (locationId.HasValue)
+            {
+                customers = customers.Where(c => c.LocationId == locationId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+                customers = customers.Where(c => c.FirstName.Contains(search) || c.LastName.Contains(search) || c.Email.Contains(search));
+            }
+
+            return customers.ToList();
         }
 
         public void AddVehicle(Guid customerId, Vehicle vehicle)

@@ -22,7 +22,7 @@
 
         IEnumerable<Customer> GetCustomers();
 
-        IEnumerable<Customer> GetCustomers(int? locationId);
+        IEnumerable<Customer> GetCustomers(int? locationId, string search);
 
         Vehicle GetVehicle(Guid CustomerId, Guid vehicleId);
 

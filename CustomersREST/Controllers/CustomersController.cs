@@ -23,9 +23,9 @@
 
         [HttpGet()]
         [HttpHead]
-        public ActionResult<IEnumerable<CustomerDto>> GetCustomers(int? locationId)
+        public ActionResult<IEnumerable<CustomerDto>> GetCustomers(int? locationId, string search)
         {
-            var customers = this.customersRepository.GetCustomers(locationId);
+            var customers = this.customersRepository.GetCustomers(locationId, search);
 
             return Ok(this.mapper.Map<IEnumerable<CustomerDto>>(customers));
         }

@@ -40,8 +40,7 @@ namespace CustomersREST
 
             services.AddDbContext<CustomersContext>(options =>
             {
-                options.UseSqlServer(
-                    @"Server=(localdb)\mssqllocaldb;Database=CustomersDB;Trusted_Connection=True;");
+                options.UseSqlServer(this.Configuration.GetConnectionString("CustomersConnectionString")).EnableSensitiveDataLogging();
             });
         }
 
