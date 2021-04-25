@@ -37,6 +37,8 @@
 
         void AddOrder(Guid customerId, Order order);
 
+        void UpdateOrder(Order ordersForCustomer);
+
         bool Save();
     }
 }

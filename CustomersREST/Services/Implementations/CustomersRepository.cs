@@ -201,6 +201,10 @@
             this.context.Orders.Add(order);
         }
 
+        public void UpdateOrder(Order ordersForCustomer)
+        {
+        }
+
         public bool Save()
         {
             return this.context.SaveChanges() >= 0;

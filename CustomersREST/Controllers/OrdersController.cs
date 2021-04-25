@@ -29,12 +29,12 @@
         {
             if (!this.customersRepository.CustomerExists(customerId))
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             IEnumerable<Order> orders = this.customersRepository.GetOrders(customerId);
 
-            return Ok(this.mapper.Map<IEnumerable<OrderDto>>(orders));
+            return this.Ok(this.mapper.Map<IEnumerable<OrderDto>>(orders));
         }
 
         [HttpGet("{orderId}", Name = "GetOrderForCustomer")]
@@ -42,16 +42,16 @@
         {
             if (!this.customersRepository.CustomerExists(customerId))
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             var order = this.customersRepository.GetOrder(customerId, orderId);
             if (order == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(this.mapper.Map<OrderDto>(order));
+            return this.Ok(this.mapper.Map<OrderDto>(order));
         }
 
 
@@ -60,20 +60,54 @@
         {
             if (!this.customersRepository.CustomerExists(customerId))
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             var orderEntiti = this.mapper.Map<Order>(order);
             this.customersRepository.AddOrder(customerId, orderEntiti);
 
             var orderToReturn = this.mapper.Map<OrderDto>(orderEntiti);
-            return CreatedAtRoute("GetOrderForCustomer",
+            return this.CreatedAtRoute("GetOrderForCustomer",
                 new
                 {
                     customerId = customerId,
                     orderId = orderEntiti.Id,
                 },
                 orderToReturn);
+        }
+
+        [HttpPut("{orderId}")]
+        public IActionResult UpdateOrderForCustomer(Guid customerId, Guid orderId, OrderForUpdateDto order)
+        {
+            if (!this.customersRepository.CustomerExists(customerId))
+            {
+                return this.NotFound();
+            }
+
+            var orderForCustomer = this.customersRepository.GetOrder(customerId, orderId);
+
+            if (orderForCustomer == null)
+            {
+                var orderToAdd = this.mapper.Map<Order>(order);
+                orderToAdd.Id = orderId;
+
+                this.customersRepository.AddOrder(customerId, orderToAdd);
+
+                this.customersRepository.Save();
+
+                var courseToReturn = this.mapper.Map<OrderDto>(orderToAdd);
+
+                return CreatedAtRoute("GetOrderForCustomer",
+                    new { customerId, courseId = courseToReturn.Id },
+                    courseToReturn);
+            }
+
+            this.mapper.Map(order, orderForCustomer);
+
+            this.customersRepository.UpdateOrder(orderForCustomer);
+
+            this.customersRepository.Save();
+            return this.NoContent();
         }
     }
 }

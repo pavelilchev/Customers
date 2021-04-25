@@ -18,6 +18,11 @@
                  .ForMember(
                       dest => dest.VehicleId,
                       opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : (Guid?)null));
+
+            CreateMap<OrderForUpdateDto, Order>()
+                .ForMember(
+                      dest => dest.VehicleId,
+                      opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : (Guid?)null));
         }
     }
 }
