@@ -4,6 +4,7 @@
     using CustomersREST.Database.Entities;
     using CustomersREST.Models;
     using CustomersREST.Services;
+    using Microsoft.AspNetCore.JsonPatch;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
@@ -95,11 +96,11 @@
 
                 this.customersRepository.Save();
 
-                var courseToReturn = this.mapper.Map<OrderDto>(orderToAdd);
+                var orderToReturn = this.mapper.Map<OrderDto>(orderToAdd);
 
                 return CreatedAtRoute("GetOrderForCustomer",
-                    new { customerId, courseId = courseToReturn.Id },
-                    courseToReturn);
+                    new { customerId,orderId = orderToReturn.Id },
+                    orderToReturn);
             }
 
             this.mapper.Map(order, orderForCustomer);
@@ -108,6 +109,56 @@
 
             this.customersRepository.Save();
             return this.NoContent();
+        }
+
+        [HttpPatch("{orderId}")]
+        public ActionResult PartiallyUpdateOrderForCustomer(Guid customerId, Guid OrderId, JsonPatchDocument<OrderForUpdateDto> patchDocument)
+        {
+            if (!this.customersRepository.CustomerExists(customerId))
+            {
+                return NotFound();
+            }
+
+            var orderForCustomerFromRepo = this.customersRepository.GetOrder(customerId, OrderId);
+
+            if (orderForCustomerFromRepo == null)
+            {
+                var orderDto = new OrderForUpdateDto();
+                patchDocument.ApplyTo(orderDto, ModelState);
+
+                if (!TryValidateModel(orderDto))
+                {
+                    return ValidationProblem(ModelState);
+                }
+
+                var orderToAdd = this.mapper.Map<Order>(orderDto);
+                orderToAdd.Id = OrderId;
+
+                this.customersRepository.AddOrder(customerId, orderToAdd);
+                this.customersRepository.Save();
+
+                var orderToReturn = this.mapper.Map<OrderDto>(orderToAdd);
+
+                return CreatedAtRoute("GetOrderForCustomer",
+                    new { customerId, orderId = orderToReturn.Id },
+                    orderToReturn);
+            }
+
+            var orderToPatch = this.mapper.Map<OrderForUpdateDto>(orderForCustomerFromRepo);       
+            patchDocument.ApplyTo(orderToPatch, ModelState);
+
+            if (!TryValidateModel(orderToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            this.mapper.Map(orderToPatch, orderForCustomerFromRepo);
+
+            this.customersRepository.UpdateOrder(orderForCustomerFromRepo);
+
+            this.customersRepository.Save();
+
+            return NoContent();
         }
     }
 }
